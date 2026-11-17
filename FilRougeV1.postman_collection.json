@@ -1,0 +1,467 @@
+{
+  "info": {
+    "name": "Fil Rouge V1 - Tests Essentiels",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "1. STUDENTS",
+      "item": [
+        {
+          "name": "Créer étudiant Alice",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Alice Dupont\",\n  \"email\": \"alice@example.com\",\n  \"program\": \"Informatique\"\n}"
+            },
+            "url": { "raw": "http://localhost:8080/students", "host": ["localhost"], "port": "8080", "path": ["students"] }
+          }
+        },
+        {
+          "name": "Créer étudiant Bob",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Bob Martin\",\n  \"email\": \"bob@example.com\",\n  \"program\": \"Mathématiques\"\n}"
+            },
+            "url": { "raw": "http://localhost:8080/students", "host": ["localhost"], "port": "8080", "path": ["students"] }
+          }
+        },
+        {
+          "name": "Créer étudiant Charlie",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Charlie Durand\",\n  \"email\": \"charlie@example.com\",\n  \"program\": \"Physique\"\n}"
+            },
+            "url": { "raw": "http://localhost:8080/students", "host": ["localhost"], "port": "8080", "path": ["students"] }
+          }
+        },
+        {
+          "name": "Lister tous les étudiants",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "http://localhost:8080/students", "host": ["localhost"], "port": "8080", "path": ["students"] }
+          }
+        },
+        {
+          "name": "Consulter étudiant par ID",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "http://localhost:8080/students/1", "host": ["localhost"], "port": "8080", "path": ["students", "1"] }
+          }
+        },
+        {
+          "name": "Modifier étudiant",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Alice Martin\",\n  \"email\": \"alice@example.com\",\n  \"program\": \"Informatique\"\n}"
+            },
+            "url": { "raw": "http://localhost:8080/students/1", "host": ["localhost"], "port": "8080", "path": ["students", "1"] }
+          }
+        },
+        {
+          "name": "[ERREUR] Étudiant inconnu",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "http://localhost:8080/students/999", "host": ["localhost"], "port": "8080", "path": ["students", "999"] }
+          }
+        },
+        {
+          "name": "[ERREUR] Email invalide",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Test\",\n  \"email\": \"email-invalide\",\n  \"program\": \"Info\"\n}"
+            },
+            "url": { "raw": "http://localhost:8080/students", "host": ["localhost"], "port": "8080", "path": ["students"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. COURSES",
+      "item": [
+        {
+          "name": "Créer module Algorithmique (capacité 2)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"code\": \"INF101\",\n  \"title\": \"Algorithmique\",\n  \"capacity\": 2\n}"
+            },
+            "url": { "raw": "http://localhost:8080/courses", "host": ["localhost"], "port": "8080", "path": ["courses"] }
+          }
+        },
+        {
+          "name": "Créer module Base de Données",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"code\": \"INF102\",\n  \"title\": \"Base de Données\",\n  \"capacity\": 30\n}"
+            },
+            "url": { "raw": "http://localhost:8080/courses", "host": ["localhost"], "port": "8080", "path": ["courses"] }
+          }
+        },
+        {
+          "name": "Lister tous les modules",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "http://localhost:8080/courses", "host": ["localhost"], "port": "8080", "path": ["courses"] }
+          }
+        },
+        {
+          "name": "Consulter module par ID",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "http://localhost:8080/courses/1", "host": ["localhost"], "port": "8080", "path": ["courses", "1"] }
+          }
+        },
+        {
+          "name": "Modifier module",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"code\": \"INF101\",\n  \"title\": \"Algorithmique Avancée\",\n  \"capacity\": 2\n}"
+            },
+            "url": { "raw": "http://localhost:8080/courses/1", "host": ["localhost"], "port": "8080", "path": ["courses", "1"] }
+          }
+        },
+        {
+          "name": "[ERREUR] Module inconnu",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "http://localhost:8080/courses/999", "host": ["localhost"], "port": "8080", "path": ["courses", "999"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. REGISTRATIONS",
+      "item": [
+        {
+          "name": "[OK] Inscrire Alice au cours INF101",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"studentId\": 1,\n  \"courseId\": 1\n}"
+            },
+            "url": { "raw": "http://localhost:8080/registrations", "host": ["localhost"], "port": "8080", "path": ["registrations"] }
+          }
+        },
+        {
+          "name": "[OK] Inscrire Bob au cours INF101",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"studentId\": 2,\n  \"courseId\": 1\n}"
+            },
+            "url": { "raw": "http://localhost:8080/registrations", "host": ["localhost"], "port": "8080", "path": ["registrations"] }
+          }
+        },
+        {
+          "name": "[ERREUR] Module complet - Charlie refusé",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"studentId\": 3,\n  \"courseId\": 1\n}"
+            },
+            "url": { "raw": "http://localhost:8080/registrations", "host": ["localhost"], "port": "8080", "path": ["registrations"] }
+          }
+        },
+        {
+          "name": "[ERREUR] Étudiant inconnu",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"studentId\": 999,\n  \"courseId\": 1\n}"
+            },
+            "url": { "raw": "http://localhost:8080/registrations", "host": ["localhost"], "port": "8080", "path": ["registrations"] }
+          }
+        },
+        {
+          "name": "[ERREUR] Module inconnu",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"studentId\": 1,\n  \"courseId\": 999\n}"
+            },
+            "url": { "raw": "http://localhost:8080/registrations", "host": ["localhost"], "port": "8080", "path": ["registrations"] }
+          }
+        },
+        {
+          "name": "Consulter inscriptions d'Alice",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "http://localhost:8080/students/1/registrations", "host": ["localhost"], "port": "8080", "path": ["students", "1", "registrations"] }
+          }
+        },
+        {
+          "name": "[ERREUR] Inscriptions étudiant inconnu",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "http://localhost:8080/students/999/registrations", "host": ["localhost"], "port": "8080", "path": ["students", "999", "registrations"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "4. EXAMS",
+      "item": [
+        {
+          "name": "Planifier examen INF101",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"courseId\": 1,\n  \"date\": \"2025-06-15\"\n}"
+            },
+            "url": { "raw": "http://localhost:8080/exams", "host": ["localhost"], "port": "8080", "path": ["exams"] }
+          }
+        },
+        {
+          "name": "Planifier examen INF102",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"courseId\": 2,\n  \"date\": \"2025-06-20\"\n}"
+            },
+            "url": { "raw": "http://localhost:8080/exams", "host": ["localhost"], "port": "8080", "path": ["exams"] }
+          }
+        },
+        {
+          "name": "Lister tous les examens",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "http://localhost:8080/exams", "host": ["localhost"], "port": "8080", "path": ["exams"] }
+          }
+        },
+        {
+          "name": "[ERREUR] Examen module inconnu",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"courseId\": 999,\n  \"date\": \"2025-06-15\"\n}"
+            },
+            "url": { "raw": "http://localhost:8080/exams", "host": ["localhost"], "port": "8080", "path": ["exams"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "5. GRADES",
+      "item": [
+        {
+          "name": "[OK] Note Alice >= 10 → VALIDE",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"examId\": 1,\n  \"studentId\": 1,\n  \"value\": 15.5\n}"
+            },
+            "url": { "raw": "http://localhost:8080/grades", "host": ["localhost"], "port": "8080", "path": ["grades"] }
+          }
+        },
+        {
+          "name": "[OK] Note Bob < 10 → ECHEC",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"examId\": 1,\n  \"studentId\": 2,\n  \"value\": 7.0\n}"
+            },
+            "url": { "raw": "http://localhost:8080/grades", "host": ["localhost"], "port": "8080", "path": ["grades"] }
+          }
+        },
+        {
+          "name": "[ERREUR] Note hors plage > 20",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"examId\": 1,\n  \"studentId\": 1,\n  \"value\": 25.0\n}"
+            },
+            "url": { "raw": "http://localhost:8080/grades", "host": ["localhost"], "port": "8080", "path": ["grades"] }
+          }
+        },
+        {
+          "name": "[ERREUR] Note négative",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"examId\": 1,\n  \"studentId\": 1,\n  \"value\": -5.0\n}"
+            },
+            "url": { "raw": "http://localhost:8080/grades", "host": ["localhost"], "port": "8080", "path": ["grades"] }
+          }
+        },
+        {
+          "name": "[ERREUR] Examen inconnu",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"examId\": 999,\n  \"studentId\": 1,\n  \"value\": 12.0\n}"
+            },
+            "url": { "raw": "http://localhost:8080/grades", "host": ["localhost"], "port": "8080", "path": ["grades"] }
+          }
+        },
+        {
+          "name": "Consulter notes d'Alice",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "http://localhost:8080/grades/student/1", "host": ["localhost"], "port": "8080", "path": ["grades", "student", "1"] }
+          }
+        },
+        {
+          "name": "Consulter notes d'un examen",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "http://localhost:8080/grades/exam/1", "host": ["localhost"], "port": "8080", "path": ["grades", "exam", "1"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "6. ABSENCES",
+      "item": [
+        {
+          "name": "Absence 1 - Alice INF101 (NON justifiée)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"studentId\": 1,\n  \"courseId\": 1,\n  \"date\": \"2025-05-05\",\n  \"justified\": \"NON\"\n}"
+            },
+            "url": { "raw": "http://localhost:8080/absences", "host": ["localhost"], "port": "8080", "path": ["absences"] }
+          }
+        },
+        {
+          "name": "Absence 2 - Alice INF101 (NON justifiée)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"studentId\": 1,\n  \"courseId\": 1,\n  \"date\": \"2025-05-12\",\n  \"justified\": \"NON\"\n}"
+            },
+            "url": { "raw": "http://localhost:8080/absences", "host": ["localhost"], "port": "8080", "path": ["absences"] }
+          }
+        },
+        {
+          "name": "Absence 3 - Alice INF101 → ECHEC + CANCELLED",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"studentId\": 1,\n  \"courseId\": 1,\n  \"date\": \"2025-05-19\",\n  \"justified\": \"NON\"\n}"
+            },
+            "url": { "raw": "http://localhost:8080/absences", "host": ["localhost"], "port": "8080", "path": ["absences"] }
+          }
+        },
+        {
+          "name": "Absence justifiée - Bob INF101",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"studentId\": 2,\n  \"courseId\": 1,\n  \"date\": \"2025-05-05\",\n  \"justified\": \"OUI\"\n}"
+            },
+            "url": { "raw": "http://localhost:8080/absences", "host": ["localhost"], "port": "8080", "path": ["absences"] }
+          }
+        },
+        {
+          "name": "Consulter absences d'Alice",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "http://localhost:8080/absences/student/1", "host": ["localhost"], "port": "8080", "path": ["absences", "student", "1"] }
+          }
+        },
+        {
+          "name": "Consulter absences Alice pour INF101",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "http://localhost:8080/absences/student/1/course/1", "host": ["localhost"], "port": "8080", "path": ["absences", "student", "1", "course", "1"] }
+          }
+        },
+        {
+          "name": "[ERREUR] Absence étudiant inconnu",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"studentId\": 999,\n  \"courseId\": 1,\n  \"date\": \"2025-05-05\",\n  \"justified\": \"NON\"\n}"
+            },
+            "url": { "raw": "http://localhost:8080/absences", "host": ["localhost"], "port": "8080", "path": ["absences"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "7. VERIFICATION RESULTATS",
+      "item": [
+        {
+          "name": "Vérifier inscription Alice → ECHEC après 3 absences",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "http://localhost:8080/students/1/registrations", "host": ["localhost"], "port": "8080", "path": ["students", "1", "registrations"] }
+          }
+        },
+        {
+          "name": "Vérifier inscription Bob → ECHEC après note < 10",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "http://localhost:8080/students/2/registrations", "host": ["localhost"], "port": "8080", "path": ["students", "2", "registrations"] }
+          }
+        },
+        {
+          "name": "Toutes les notes de l'examen 1",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "http://localhost:8080/grades/exam/1", "host": ["localhost"], "port": "8080", "path": ["grades", "exam", "1"] }
+          }
+        }
+      ]
+    }
+  ]
+}
