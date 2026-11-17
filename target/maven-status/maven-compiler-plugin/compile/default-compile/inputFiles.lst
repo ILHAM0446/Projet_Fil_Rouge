@@ -4,11 +4,13 @@ C:\ME\JEE\PROJET\projet_fil_rouge_ver1\src\main\java\org\example\projet_fil_roug
 C:\ME\JEE\PROJET\projet_fil_rouge_ver1\src\main\java\org\example\projet_fil_rouge_ver1\controller\ExamController.java
 C:\ME\JEE\PROJET\projet_fil_rouge_ver1\src\main\java\org\example\projet_fil_rouge_ver1\controller\GlobalExceptionHandler.java
 C:\ME\JEE\PROJET\projet_fil_rouge_ver1\src\main\java\org\example\projet_fil_rouge_ver1\controller\GradeController.java
+C:\ME\JEE\PROJET\projet_fil_rouge_ver1\src\main\java\org\example\projet_fil_rouge_ver1\controller\GradingFormulaController.java
 C:\ME\JEE\PROJET\projet_fil_rouge_ver1\src\main\java\org\example\projet_fil_rouge_ver1\controller\RegistrationController.java
 C:\ME\JEE\PROJET\projet_fil_rouge_ver1\src\main\java\org\example\projet_fil_rouge_ver1\controller\StudentController.java
 C:\ME\JEE\PROJET\projet_fil_rouge_ver1\src\main\java\org\example\projet_fil_rouge_ver1\dto\AbsenceRequest.java
 C:\ME\JEE\PROJET\projet_fil_rouge_ver1\src\main\java\org\example\projet_fil_rouge_ver1\dto\ExamRequest.java
 C:\ME\JEE\PROJET\projet_fil_rouge_ver1\src\main\java\org\example\projet_fil_rouge_ver1\dto\GradeRequest.java
+C:\ME\JEE\PROJET\projet_fil_rouge_ver1\src\main\java\org\example\projet_fil_rouge_ver1\dto\GradingFormulaRequest.java
 C:\ME\JEE\PROJET\projet_fil_rouge_ver1\src\main\java\org\example\projet_fil_rouge_ver1\dto\PrerequisiteRequest.java
 C:\ME\JEE\PROJET\projet_fil_rouge_ver1\src\main\java\org\example\projet_fil_rouge_ver1\dto\RegistrationRequest.java
 C:\ME\JEE\PROJET\projet_fil_rouge_ver1\src\main\java\org\example\projet_fil_rouge_ver1\model\Absence.java
@@ -16,6 +18,7 @@ C:\ME\JEE\PROJET\projet_fil_rouge_ver1\src\main\java\org\example\projet_fil_roug
 C:\ME\JEE\PROJET\projet_fil_rouge_ver1\src\main\java\org\example\projet_fil_rouge_ver1\model\CoursePrerequisite.java
 C:\ME\JEE\PROJET\projet_fil_rouge_ver1\src\main\java\org\example\projet_fil_rouge_ver1\model\Exam.java
 C:\ME\JEE\PROJET\projet_fil_rouge_ver1\src\main\java\org\example\projet_fil_rouge_ver1\model\Grade.java
+C:\ME\JEE\PROJET\projet_fil_rouge_ver1\src\main\java\org\example\projet_fil_rouge_ver1\model\GradingFormula.java
 C:\ME\JEE\PROJET\projet_fil_rouge_ver1\src\main\java\org\example\projet_fil_rouge_ver1\model\Registration.java
 C:\ME\JEE\PROJET\projet_fil_rouge_ver1\src\main\java\org\example\projet_fil_rouge_ver1\model\Student.java
 C:\ME\JEE\PROJET\projet_fil_rouge_ver1\src\main\java\org\example\projet_fil_rouge_ver1\ProjetFilRougeVer1Application.java
@@ -24,6 +27,7 @@ C:\ME\JEE\PROJET\projet_fil_rouge_ver1\src\main\java\org\example\projet_fil_roug
 C:\ME\JEE\PROJET\projet_fil_rouge_ver1\src\main\java\org\example\projet_fil_rouge_ver1\repository\CourseRepository.java
 C:\ME\JEE\PROJET\projet_fil_rouge_ver1\src\main\java\org\example\projet_fil_rouge_ver1\repository\ExamRepository.java
 C:\ME\JEE\PROJET\projet_fil_rouge_ver1\src\main\java\org\example\projet_fil_rouge_ver1\repository\GradeRepository.java
+C:\ME\JEE\PROJET\projet_fil_rouge_ver1\src\main\java\org\example\projet_fil_rouge_ver1\repository\GradingFormulaRepository.java
 C:\ME\JEE\PROJET\projet_fil_rouge_ver1\src\main\java\org\example\projet_fil_rouge_ver1\repository\RegistrationRepository.java
 C:\ME\JEE\PROJET\projet_fil_rouge_ver1\src\main\java\org\example\projet_fil_rouge_ver1\repository\StudentRepository.java
 C:\ME\JEE\PROJET\projet_fil_rouge_ver1\src\main\java\org\example\projet_fil_rouge_ver1\service\AbsenceService.java
@@ -31,5 +35,6 @@ C:\ME\JEE\PROJET\projet_fil_rouge_ver1\src\main\java\org\example\projet_fil_roug
 C:\ME\JEE\PROJET\projet_fil_rouge_ver1\src\main\java\org\example\projet_fil_rouge_ver1\service\CourseService.java
 C:\ME\JEE\PROJET\projet_fil_rouge_ver1\src\main\java\org\example\projet_fil_rouge_ver1\service\ExamService.java
 C:\ME\JEE\PROJET\projet_fil_rouge_ver1\src\main\java\org\example\projet_fil_rouge_ver1\service\GradeService.java
+C:\ME\JEE\PROJET\projet_fil_rouge_ver1\src\main\java\org\example\projet_fil_rouge_ver1\service\GradingFormulaService.java
 C:\ME\JEE\PROJET\projet_fil_rouge_ver1\src\main\java\org\example\projet_fil_rouge_ver1\service\RegistrationService.java
 C:\ME\JEE\PROJET\projet_fil_rouge_ver1\src\main\java\org\example\projet_fil_rouge_ver1\service\StudentService.java

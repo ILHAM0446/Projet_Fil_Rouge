@@ -22,6 +22,9 @@ public class Course {
     @Min(1)
     private int capacity;
 
+    @Min(1)
+    private int totalSessions = 1; // nombre total de séances du module
+
     public Course() {}
 
     public Long getId() { return id; }
@@ -31,4 +34,6 @@ public class Course {
     public void setTitle(String title) { this.title = title; }
     public int getCapacity() { return capacity; }
     public void setCapacity(int capacity) { this.capacity = capacity; }
+    public int getTotalSessions() { return totalSessions; }
+    public void setTotalSessions(int totalSessions) { this.totalSessions = totalSessions; }
 }

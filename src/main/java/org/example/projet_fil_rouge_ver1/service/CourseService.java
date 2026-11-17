@@ -25,6 +25,7 @@ public class CourseService {
         c.setCode(data.getCode());
         c.setTitle(data.getTitle());
         c.setCapacity(data.getCapacity());
+        c.setTotalSessions(data.getTotalSessions());
         return repo.save(c);
     }
 

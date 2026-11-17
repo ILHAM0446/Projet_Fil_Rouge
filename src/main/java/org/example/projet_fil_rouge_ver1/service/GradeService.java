@@ -1,6 +1,7 @@
 package org.example.projet_fil_rouge_ver1.service;
 
 import org.example.projet_fil_rouge_ver1.dto.GradeRequest;
+import org.example.projet_fil_rouge_ver1.model.Exam;
 import org.example.projet_fil_rouge_ver1.model.Grade;
 import org.example.projet_fil_rouge_ver1.model.Registration;
 import org.example.projet_fil_rouge_ver1.repository.GradeRepository;
@@ -17,6 +18,7 @@ public class GradeService {
     private final StudentService studentService;
     private final RegistrationRepository registrationRepo;
     private final GradingFormulaService formulaService;
+    private final AttendanceService attendanceService;
 
     @Value("${app.grade.moyenne:10.0}")
     private double moyenneMinimale;
@@ -24,12 +26,14 @@ public class GradeService {
     public GradeService(GradeRepository repo, ExamService examService,
                         StudentService studentService,
                         RegistrationRepository registrationRepo,
-                        GradingFormulaService formulaService) {
+                        GradingFormulaService formulaService,
+                        AttendanceService attendanceService) {
         this.repo = repo;
         this.examService = examService;
         this.studentService = studentService;
         this.registrationRepo = registrationRepo;
         this.formulaService = formulaService;
+        this.attendanceService = attendanceService;
     }
 
     public Grade save(GradeRequest req) {
@@ -37,10 +41,17 @@ public class GradeService {
         g.setExam(examService.findById(req.examId));
         g.setStudent(studentService.findById(req.studentId));
         g.setValue(req.value);
+
+        Long courseId = g.getExam().getCourse().getId();
+
+        // Bloquer la saisie si examen final et absences >= 20%
+        if (g.getExam().getEvaluationType() == Exam.EvaluationType.EXAM) {
+            attendanceService.verifierEligibiliteExamen(req.studentId, courseId);
+        }
+
         Grade saved = repo.save(g);
 
-        // Recalcul de la moyenne pondérée après chaque saisie de note
-        Long courseId = saved.getExam().getCourse().getId();
+        // Recalcul de la moyenne pondérée après chaque saisie
         double moyennePonderee = formulaService.calculerMoyenne(req.studentId, courseId);
 
         registrationRepo.findByStudentId(req.studentId).stream()
@@ -67,10 +78,8 @@ public class GradeService {
         return repo.findByExamId(examId);
     }
 
-    // Exposer la moyenne pondérée calculée pour un étudiant/cours
     public double getMoyennePonderee(Long studentId, Long courseId) {
         studentService.findById(studentId);
-        courseId = courseId; // validation implicite via formulaService
         return formulaService.calculerMoyenne(studentId, courseId);
     }
 }

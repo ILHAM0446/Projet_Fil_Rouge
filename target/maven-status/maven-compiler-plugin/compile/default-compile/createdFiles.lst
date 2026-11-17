@@ -1,0 +1,6 @@
+org\example\projet_fil_rouge_ver1\model\GradingFormula.class
+org\example\projet_fil_rouge_ver1\model\Exam$EvaluationType.class
+org\example\projet_fil_rouge_ver1\service\GradingFormulaService.class
+org\example\projet_fil_rouge_ver1\controller\GradingFormulaController.class
+org\example\projet_fil_rouge_ver1\repository\GradingFormulaRepository.class
+org\example\projet_fil_rouge_ver1\dto\GradingFormulaRequest.class
