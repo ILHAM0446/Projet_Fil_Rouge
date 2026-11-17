@@ -6,6 +6,9 @@ import jakarta.persistence.*;
 @Table(name = "registrations", uniqueConstraints = @UniqueConstraint(columnNames = {"student_id", "course_id"}))
 public class Registration {
 
+    public enum Status { ACTIVE, CANCELLED, WAITING_LIST }
+    public enum Result { EN_COURS, VALIDE, ECHEC }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -24,8 +27,12 @@ public class Registration {
     @Enumerated(EnumType.STRING)
     private Result result = Result.EN_COURS;
 
-    public enum Status { ACTIVE, CANCELLED }
-    public enum Result { EN_COURS, VALIDE, ECHEC }
+    // Position dans la liste d'attente (null si ACTIVE ou CANCELLED)
+    private Integer waitingPosition;
+
+    // Optimistic locking — évite les inscriptions concurrentes silencieuses
+    @Version
+    private Long version;
 
     public Registration() {}
 
@@ -38,4 +45,7 @@ public class Registration {
     public void setStatus(Status status) { this.status = status; }
     public Result getResult() { return result; }
     public void setResult(Result result) { this.result = result; }
+    public Integer getWaitingPosition() { return waitingPosition; }
+    public void setWaitingPosition(Integer waitingPosition) { this.waitingPosition = waitingPosition; }
+    public Long getVersion() { return version; }
 }

@@ -8,7 +8,9 @@ import org.example.projet_fil_rouge_ver1.repository.CoursePrerequisiteRepository
 import org.example.projet_fil_rouge_ver1.repository.GradeRepository;
 import org.example.projet_fil_rouge_ver1.repository.RegistrationRepository;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
@@ -34,65 +36,118 @@ public class RegistrationService {
         this.gradeRepo = gradeRepo;
     }
 
+    @Transactional
     public Registration register(Long studentId, Long courseId) {
         Student student = studentService.findById(studentId);
         Course course = courseService.findById(courseId);
 
-        // Règle 1 : capacité
-        long enrolled = repo.countByCourseIdAndStatus(courseId, Registration.Status.ACTIVE);
-        if (enrolled >= course.getCapacity()) {
-            throw new RuntimeException("Course is full: " + course.getCode());
-        }
+        // Vérifier doublon
+        repo.findByStudentIdAndCourseId(studentId, courseId).ifPresent(r -> {
+            throw new RuntimeException("Étudiant déjà inscrit ou en liste d'attente pour ce module");
+        });
 
-        // Règle 2 : prérequis pédagogiques
+        // Vérifier prérequis
         checkPrerequisites(studentId, courseId);
+
+        // Verrouillage pessimiste : lecture + comptage atomique
+        long enrolled = repo.countActiveWithLock(courseId);
 
         Registration r = new Registration();
         r.setStudent(student);
         r.setCourse(course);
-        return repo.save(r);
+
+        if (enrolled >= course.getCapacity()) {
+            // Module complet → liste d'attente
+            int position = repo.nextWaitingPosition(courseId);
+            r.setStatus(Registration.Status.WAITING_LIST);
+            r.setWaitingPosition(position);
+        } else {
+            r.setStatus(Registration.Status.ACTIVE);
+        }
+
+        try {
+            return repo.save(r);
+        } catch (OptimisticLockingFailureException e) {
+            throw new RuntimeException("Conflit d'inscription concurrent, veuillez réessayer");
+        }
     }
 
-    private void checkPrerequisites(Long studentId, Long courseId) {
-        List<CoursePrerequisite> prerequisites = prerequisiteRepo.findByCourseId(courseId);
+    @Transactional
+    public Registration cancel(Long registrationId) {
+        Registration r = repo.findById(registrationId)
+            .orElseThrow(() -> new RuntimeException("Inscription introuvable : " + registrationId));
 
-        for (CoursePrerequisite prereq : prerequisites) {
-            Long prereqCourseId = prereq.getPrerequisite().getId();
-            String prereqCode = prereq.getPrerequisite().getCode();
+        if (r.getStatus() == Registration.Status.CANCELLED) {
+            throw new RuntimeException("Inscription déjà annulée");
+        }
 
-            // Vérifier si l'étudiant a une inscription VALIDE pour ce prérequis
-            boolean validatedByRegistration = repo.findByStudentId(studentId).stream()
-                .anyMatch(r -> r.getCourse().getId().equals(prereqCourseId)
-                            && r.getResult() == Registration.Result.VALIDE);
+        boolean wasActive = r.getStatus() == Registration.Status.ACTIVE;
+        r.setStatus(Registration.Status.CANCELLED);
+        r.setWaitingPosition(null);
+        repo.save(r);
 
-            if (validatedByRegistration) continue;
+        // Promouvoir le premier en liste d'attente si une place ACTIVE se libère
+        if (wasActive) {
+            promouvoirPremierEnAttente(r.getCourse().getId());
+        }
 
-            // Vérifier via les notes (meilleure note >= moyenne)
-            double bestGrade = gradeRepo
-                .findBestGradeByStudentAndCourse(studentId, prereqCourseId)
-                .orElse(0.0);
+        return r;
+    }
 
-            if (bestGrade >= moyenneMinimale) continue;
+    // Atomique : promotion du premier étudiant en attente
+    private void promouvoirPremierEnAttente(Long courseId) {
+        List<Registration> waitingList = repo.findWaitingListByCourseOrdered(courseId);
+        if (waitingList.isEmpty()) return;
 
-            // Cas équivalence : prérequis non validé mais équivalence autorisée → avertissement non bloquant
-            if (prereq.isEquivalenceAllowed()) continue;
+        Registration premier = waitingList.get(0);
+        premier.setStatus(Registration.Status.ACTIVE);
+        premier.setWaitingPosition(null);
+        repo.save(premier);
 
-            // Cas prérequis absent (jamais suivi)
-            boolean everEnrolled = repo.findByStudentId(studentId).stream()
-                .anyMatch(r -> r.getCourse().getId().equals(prereqCourseId));
-
-            if (!everEnrolled) {
-                throw new RuntimeException("Prérequis absent : l'étudiant n'a jamais suivi le module " + prereqCode);
-            }
-
-            // Cas prérequis suivi mais non validé
-            throw new RuntimeException("Prérequis non validé : note insuffisante pour le module " + prereqCode
-                + " (meilleure note : " + bestGrade + "/" + moyenneMinimale + ")");
+        // Réordonner les positions restantes
+        List<Registration> reste = waitingList.subList(1, waitingList.size());
+        for (int i = 0; i < reste.size(); i++) {
+            reste.get(i).setWaitingPosition(i + 1);
+            repo.save(reste.get(i));
         }
     }
 
     public List<Registration> findByStudent(Long studentId) {
         studentService.findById(studentId);
         return repo.findByStudentId(studentId);
+    }
+
+    public List<Registration> getWaitingList(Long courseId) {
+        courseService.findById(courseId);
+        return repo.findWaitingListByCourseOrdered(courseId);
+    }
+
+    private void checkPrerequisites(Long studentId, Long courseId) {
+        List<CoursePrerequisite> prerequisites = prerequisiteRepo.findByCourseId(courseId);
+        for (CoursePrerequisite prereq : prerequisites) {
+            Long prereqCourseId = prereq.getPrerequisite().getId();
+            String prereqCode = prereq.getPrerequisite().getCode();
+
+            boolean validatedByRegistration = repo.findByStudentId(studentId).stream()
+                .anyMatch(r -> r.getCourse().getId().equals(prereqCourseId)
+                            && r.getResult() == Registration.Result.VALIDE);
+            if (validatedByRegistration) continue;
+
+            double bestGrade = gradeRepo
+                .findBestGradeByStudentAndCourse(studentId, prereqCourseId)
+                .orElse(0.0);
+            if (bestGrade >= moyenneMinimale) continue;
+
+            if (prereq.isEquivalenceAllowed()) continue;
+
+            boolean everEnrolled = repo.findByStudentId(studentId).stream()
+                .anyMatch(r -> r.getCourse().getId().equals(prereqCourseId));
+
+            if (!everEnrolled) {
+                throw new RuntimeException("Prérequis absent : l'étudiant n'a jamais suivi le module " + prereqCode);
+            }
+            throw new RuntimeException("Prérequis non validé : note insuffisante pour le module " + prereqCode
+                + " (meilleure note : " + bestGrade + "/" + moyenneMinimale + ")");
+        }
     }
 }

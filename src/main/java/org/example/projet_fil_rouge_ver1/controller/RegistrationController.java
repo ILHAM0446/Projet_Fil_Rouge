@@ -15,14 +15,28 @@ public class RegistrationController {
 
     public RegistrationController(RegistrationService service) { this.service = service; }
 
+    // Inscrire ou placer en liste d'attente
     @PostMapping("/registrations")
     @ResponseStatus(HttpStatus.CREATED)
     public Registration register(@Valid @RequestBody RegistrationRequest req) {
         return service.register(req.studentId, req.courseId);
     }
 
+    // Annuler une inscription (déclenche promotion automatique)
+    @PatchMapping("/registrations/{id}/cancel")
+    public Registration cancel(@PathVariable Long id) {
+        return service.cancel(id);
+    }
+
+    // Consulter les inscriptions d'un étudiant
     @GetMapping("/students/{id}/registrations")
     public List<Registration> getByStudent(@PathVariable Long id) {
         return service.findByStudent(id);
+    }
+
+    // Consulter la liste d'attente d'un cours
+    @GetMapping("/courses/{courseId}/waiting-list")
+    public List<Registration> getWaitingList(@PathVariable Long courseId) {
+        return service.getWaitingList(courseId);
     }
 }
