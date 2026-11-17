@@ -25,4 +25,10 @@ public class GradeController {
 
     @GetMapping("/exam/{examId}")
     public List<Grade> byExam(@PathVariable Long examId) { return service.findByExam(examId); }
+
+    // Consulter la moyenne pondérée d'un étudiant pour un cours
+    @GetMapping("/moyenne/student/{studentId}/course/{courseId}")
+    public double moyennePonderee(@PathVariable Long studentId, @PathVariable Long courseId) {
+        return service.getMoyennePonderee(studentId, courseId);
+    }
 }

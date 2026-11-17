@@ -16,16 +16,20 @@ public class GradeService {
     private final ExamService examService;
     private final StudentService studentService;
     private final RegistrationRepository registrationRepo;
+    private final GradingFormulaService formulaService;
 
     @Value("${app.grade.moyenne:10.0}")
     private double moyenneMinimale;
 
     public GradeService(GradeRepository repo, ExamService examService,
-                        StudentService studentService, RegistrationRepository registrationRepo) {
+                        StudentService studentService,
+                        RegistrationRepository registrationRepo,
+                        GradingFormulaService formulaService) {
         this.repo = repo;
         this.examService = examService;
         this.studentService = studentService;
         this.registrationRepo = registrationRepo;
+        this.formulaService = formulaService;
     }
 
     public Grade save(GradeRequest req) {
@@ -35,14 +39,16 @@ public class GradeService {
         g.setValue(req.value);
         Grade saved = repo.save(g);
 
-        // Règle : note >= moyenne → VALIDE, sinon ECHEC
+        // Recalcul de la moyenne pondérée après chaque saisie de note
         Long courseId = saved.getExam().getCourse().getId();
+        double moyennePonderee = formulaService.calculerMoyenne(req.studentId, courseId);
+
         registrationRepo.findByStudentId(req.studentId).stream()
             .filter(r -> r.getCourse().getId().equals(courseId)
                       && r.getStatus() == Registration.Status.ACTIVE)
             .findFirst()
             .ifPresent(r -> {
-                r.setResult(req.value >= moyenneMinimale
+                r.setResult(moyennePonderee >= moyenneMinimale
                     ? Registration.Result.VALIDE
                     : Registration.Result.ECHEC);
                 registrationRepo.save(r);
@@ -59,5 +65,12 @@ public class GradeService {
     public List<Grade> findByExam(Long examId) {
         examService.findById(examId);
         return repo.findByExamId(examId);
+    }
+
+    // Exposer la moyenne pondérée calculée pour un étudiant/cours
+    public double getMoyennePonderee(Long studentId, Long courseId) {
+        studentService.findById(studentId);
+        courseId = courseId; // validation implicite via formulaService
+        return formulaService.calculerMoyenne(studentId, courseId);
     }
 }

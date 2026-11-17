@@ -27,6 +27,7 @@ public class ExamService {
         Exam e = new Exam();
         e.setCourse(courseService.findById(req.courseId));
         e.setDate(req.date);
+        e.setEvaluationType(req.evaluationType);
         return repo.save(e);
     }
 }
